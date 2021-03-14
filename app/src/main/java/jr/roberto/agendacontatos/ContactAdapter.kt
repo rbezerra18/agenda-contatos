@@ -26,7 +26,7 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactAdapterViewHol
 
     fun updateList(list : List<Contact>) {
         this.list.clear()
-        this.list.addAll(list)
+        this.list.addAll(list.sortedBy { it.name })
         notifyDataSetChanged()
     }
 
