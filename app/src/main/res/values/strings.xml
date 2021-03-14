@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Agenda de Contatos</string>
+
     <string name="iv_photografy_content_description">Descrição</string>
+
     <string name="contact_name">Nome</string>
     <string name="contact_phone">Telefone</string>
+
+    <string name="menu_item_1">Item 1</string>
+    <string name="menu_item_2">Item 2</string>
+    <string name="menu_item_3">Item 3</string>
 </resources>
