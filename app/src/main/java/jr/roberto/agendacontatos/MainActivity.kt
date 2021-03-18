@@ -1,5 +1,6 @@
 package jr.roberto.agendacontatos
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,7 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ClickItemContactListener {
 
     private val rvList: RecyclerView by lazy {
         findViewById<RecyclerView>(R.id.rv_list)
@@ -118,6 +119,11 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun clickItemContact(contact: Contact) {
+        val intent = Intent(this, ContactDetailActivity::class.java)
+        startActivity(intent)
     }
 
 }
