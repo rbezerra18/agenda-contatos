@@ -1,6 +1,8 @@
 package jr.roberto.agendacontatos
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -10,9 +12,12 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.edit
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import jr.roberto.agendacontatos.ContactDetailActivity.Companion.EXTRA_CONTACT
 
 class MainActivity : AppCompatActivity(), ClickItemContactListener {
@@ -28,8 +33,61 @@ class MainActivity : AppCompatActivity(), ClickItemContactListener {
         setContentView(R.layout.drawer_menu)
 
         initDrawer()
+        fetchListContact()
         bindView()
-        updateList()
+    }
+
+    private fun fetchListContact() {
+        val list = arrayListOf(
+                        Contact(
+                                "Roberto Bezerra",
+                                "(21) 98946-1436",
+                                "img.png"
+                        ),
+                        Contact(
+                                "Herton Gomes",
+                                "(21) 98946-0000",
+                                "img.png"
+                        ),
+                        Contact(
+                                "Maria Antonieta",
+                                "(21) 99999-1436",
+                                "img.png"
+                        ),
+                        Contact(
+                                "Carla Diaz",
+                                "(21) 98544-12554",
+                                "img.png"
+                        ),
+                        Contact(
+                                "José Augusto",
+                                "(21) 98854-0012",
+                                "img.png"
+                        ),
+                        Contact(
+                                "Zélia Fernandes",
+                                "(21) 98874-4587",
+                                "img.png"
+                        ),
+                        Contact(
+                                "Adriano Martins",
+                                "(21) 99999-0241",
+                                "img.png"
+                        ),
+                        Contact(
+                                "Cesar Scremin",
+                                "(21) 99989-9999",
+                                "img.png"
+                        )
+                )
+        getInstanceSharedPreferences().edit {
+            putString("contacts", Gson().toJson(list))
+            commit()
+        }
+    }
+
+    private fun getInstanceSharedPreferences(): SharedPreferences {
+        return getSharedPreferences("jr.roberto.agendacontatos.PREFERENCES", Context.MODE_PRIVATE)
     }
 
     private fun initDrawer() {
@@ -46,53 +104,17 @@ class MainActivity : AppCompatActivity(), ClickItemContactListener {
     private fun bindView() {
         rvList.adapter = adapter
         rvList.layoutManager = LinearLayoutManager(this)
+        updateList()
+    }
+
+    private fun getListContacts() : List<Contact> {
+        val list = getInstanceSharedPreferences().getString("contacts","[]")
+        val turnsType = object : TypeToken<List<Contact>>() {}.type
+        return Gson().fromJson(list, turnsType)
     }
 
     private fun updateList() {
-        adapter.updateList(
-            arrayListOf(
-                Contact(
-                    "Roberto Bezerra",
-                    "(21) 98946-1436",
-                    "img.png"
-                ),
-                Contact(
-                    "Herton Gomes",
-                    "(21) 98946-0000",
-                    "img.png"
-                ),
-                Contact(
-                    "Maria Antonieta",
-                    "(21) 99999-1436",
-                    "img.png"
-                ),
-                Contact(
-                    "Carla Diaz",
-                    "(21) 98544-12554",
-                    "img.png"
-                ),
-                Contact(
-                    "José Augusto",
-                    "(21) 98854-0012",
-                    "img.png"
-                ),
-                Contact(
-                    "Zélia Fernandes",
-                    "(21) 98874-4587",
-                    "img.png"
-                ),
-                Contact(
-                    "Adriano Martins",
-                    "(21) 99999-0241",
-                    "img.png"
-                ),
-                Contact(
-                    "Cesar Scremin",
-                    "(21) 99989-9999",
-                    "img.png"
-                )
-            )
-        )
+        adapter.updateList(getListContacts())
     }
 
     private fun showToast(message: String) {
